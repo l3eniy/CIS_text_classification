@@ -1,13 +1,14 @@
 #code for logistic regression
 #nur ein feature berücksichtigt über .txt datei eingelesen, accuracy liegt bei 40%
-#Keras implementiert
+#Keras und Tensorflow  implementiert
 #Score Ergebnisse mit Keras:training accuracy:0.0837
 #training accuracy:0.1324
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
+#from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from keras.models import Sequential
 from keras import layers
 from keras.backend import clear_session
@@ -43,7 +44,8 @@ X_test = vectorizer.transform(requirement_description_test)
 
 X_train
 
-classifier = LogisticRegression()
+#classifier = LogisticRegression()
+classifier = RandomForestClassifier()
 classifier.fit(X_train, y_train)
 score1 = classifier.score(X_train , y_train)
 score2 = classifier.score(X_test, y_test)
