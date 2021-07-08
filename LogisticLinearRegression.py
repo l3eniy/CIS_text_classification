@@ -62,30 +62,6 @@ print("Accuracy: Train", score1)
 print("Accuracy: Test", score2)
 
 
-#input_dim = X_train.shape[1]
-#model = Sequential()
-#model.add(layers.Dense(10, input_dim=input_dim, activation='relu'))
-#model.add(layers.Dense(1, activation='sigmoid'))
-#model.compile(loss='binary_crossentropy',
-#              optimizer='adam',
-#              metrics=['accuracy'])
-#model.summary()
-
-#history = model.fit(X_train, y_train,
-#                    epochs=100,
-#                    verbose=False,
-#                    validation_data=(X_test, y_test),
-#                    batch_size=10
-#                    )
-
-#clear_session()
-
-#loss, accuracy = model.evaluate(X_train,y_train, verbose=False)
-#print("training accuracy:{:.4f}".format(accuracy))
-
-#loss1, accuracy2 = model.evaluate(X_test, y_test, verbose=False)
-#print("training accuracy:{:.4f}".format(accuracy2))
-
 
 
 
