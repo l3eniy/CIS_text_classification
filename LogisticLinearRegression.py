@@ -37,7 +37,7 @@ requirement_description_test = vectorizer.transform(requirement_description_test
 classifier = SVC()
 classifier.fit(requirement_description_train, funktional_train)     # Hier wird das ausgewählte Modell mit den trainingsdaten trainiert
 
-### Prezision es Modells auswerten
+### Präzision es Modells auswerten
 funktional_prediction = classifier.predict(requirement_description_test)
 print(classification_report(funktional_test,funktional_prediction))
 print(confusion_matrix(funktional_test,funktional_prediction))
