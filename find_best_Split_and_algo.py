@@ -6,9 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 
-import nltk
-from nltk.tokenize import TreebankWordTokenizer
-from scipy.sparse import csr_matrix
 
 df = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')
 
@@ -17,9 +14,9 @@ funktionales_requirement = df['label'].values
 
 scores = []
 for i in range(1,100):
-    i = i/100
+    i = i/100       # Test_size von 0.01 bis 0.99 durchgehen
 
-    requirement_description_train, requirement_description_test, funktional_train, funktional_test = train_test_split(requirement_description, funktionales_requirement,test_size=i, random_state=45)
+    requirement_description_train, requirement_description_test, funktional_train, funktional_test = train_test_split(requirement_description, funktionales_requirement,test_size=i, random_state=1000)
 
     vectorizer = CountVectorizer()
     vectorizer.fit(requirement_description_train)
@@ -27,7 +24,7 @@ for i in range(1,100):
     requirement_description_train = vectorizer.transform(requirement_description_train)
     requirement_description_test = vectorizer.transform(requirement_description_test)
 
-    classifier = LogisticRegression()
+    classifier = LogisticRegression()       # ---> Logisticregression ist am Schnellsten und bietet ähnliche Ergebnisse wie die anderen
     # classifier = RandomForestClassifier()
     # classifier = GradientBoostingClassifier()
     classifier.fit(requirement_description_train, funktional_train)
