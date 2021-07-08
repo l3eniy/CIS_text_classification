@@ -1,67 +1,41 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-#from sklearn.linear_model import LogisticRegression
+# from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 
-#from keras.models import Sequential
-#from keras import layers
-#from keras.backend import clear_session
-#import nltk
+import nltk
 from nltk.tokenize import TreebankWordTokenizer
 from scipy.sparse import csr_matrix
 
-
-filepath_dict = {'CIS_labeled': 'BigDataTemplate4.txt'
-                 }
-
-df_list = []
-for source, filepath in filepath_dict.items():
-    df = pd.read_csv(filepath, names = ['CIS-Req', 'label'], sep= '\t')
-    df_list.append(df)
-
-df = pd.concat(df_list)
-print(df.iloc[0])
-
-#tokenizer = TreebankWordTokenizer(df)
-#print (tokenizer)
-
-
-vectorizer = CountVectorizer(min_df=0, lowercase=False)
-vectorizer.fit(df['CIS-Req'])
-print(vectorizer.vocabulary_)
-print(vectorizer.transform(df['CIS-Req']).toarray)
+df = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')
 
 requirement_description = df['CIS-Req'].values
-y = df['label'].values
+funktionales_requirement = df['label'].values
 
-requirement_description_train, requirement_description_test, y_train, y_test = train_test_split(requirement_description, y, test_size = 0.25, random_state = 1000)
+scores = []
+for i in range(1,100):
+    i = i/100
 
-vectorizer = CountVectorizer()
-vectorizer.fit(requirement_description_train)
+    requirement_description_train, requirement_description_test, funktional_train, funktional_test = train_test_split(requirement_description, funktionales_requirement,test_size=i, random_state=45)
 
-X_train = vectorizer.transform(requirement_description_train)
-X_test = vectorizer.transform(requirement_description_test)
+    vectorizer = CountVectorizer()
+    vectorizer.fit(requirement_description_train)
 
-X_train
+    requirement_description_train = vectorizer.transform(requirement_description_train)
+    requirement_description_test = vectorizer.transform(requirement_description_test)
 
-#classifier = LogisticRegression()
-#classifier = RandomForestClassifier()
-classifier = GradientBoostingClassifier()
-classifier.fit(X_train, y_train)
-score1 = classifier.score(X_train, y_train)
-score2 = classifier.score(X_test, y_test)
+    classifier = LogisticRegression()
+    # classifier = RandomForestClassifier()
+    # classifier = GradientBoostingClassifier()
+    classifier.fit(requirement_description_train, funktional_train)
+    score1 = classifier.score(requirement_description_train, funktional_train)
+    score2 = classifier.score(requirement_description_test, funktional_test)
 
-print(type(X_train))
-print(type(y_train))
-#print(y_train)
-print(csr_matrix(X_train).toarray())
-
-print("Accuracy: Train", score1)
-print("Accuracy: Test", score2)
-
-
-
-
-
+    print("################################## Anteil der Testdaten = " + str(i))
+    print("Genauigkeit der Trainingsdaten: " + str(score1))
+    print("Genauigkeit der Testdaten: "+ str(score2))
+    scores.append(score1+score2)
+print("Max Score: " + str(max(scores)))
