@@ -6,17 +6,19 @@ from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from joblib import dump, load
+import pickle
+
 
 
 df = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')
-cis_requirement = df['CIS-Req'].values
+cis_requirements = df['CIS-Req'].values
 funktionale_requirements = df['label'].values
 
 list_X = ["Heute ist das Wetter nicht gut", "Heute ist das Wetter gut", "Heute das Wetter ist nicht gut",
            "Das Wetter ist heute gut", "Kopfschmerzen sind schlimm!", "Heute habe ich Kopfschmerzen wegen dem Wetter"]
 list_Y = [0, 1, 0, 1, "String geht auch als Label", "String geht auch als Label"] # 0 --> schlechtes Wetter, 1 --> gutes Wetter, 3 --> Kopfschmerzen
 
-test_X = "Das ist nicht so gutes Wetter!"
 
 
 
@@ -55,26 +57,32 @@ def predict_funktionale_Anforderung(neuer_y_string):
     print(neuer_y_string + "\t\t-->\t\t" + str(predicted_label[0]))
     return predicted_label[0]
 
+def print_mapping(X,Y, filter):
+    '''
+    Gibt das Mapping von X und Y in Konsole aus. Mit filter auf "no" wird alles ausgegeben
+    :param X: CIS_Requirement
+    :param Y: funktionale
+    :param filter: "no" --> alles, int --> filtert Y
+    :return: None
+    '''
+    for i in range(0, len(X)):
+        if filter == "no":
+            print(X[i] + "\t\t-->\t\t" + str(Y[i]))
+            continue
+        if Y[i] == filter:
+            print(X[i] + "\t\t-->\t\t" + str(Y[i]))
 
 
 
-
-X, Y = prepare_trainingsdata(list_X, list_Y)
+X, Y = prepare_trainingsdata(cis_requirements, funktionale_requirements)
 CLASSIFIER.fit(X, Y)  # Hier wird das ausgewählte Modell mit den trainingsdaten trainiert
 
+print_mapping(cis_requirements, funktionale_requirements, 1)
+
+test_X = "Ensure foobar services are not enabled"
 predict_funktionale_Anforderung(test_X)
 
 
-
-
-### Präzision es Modells auswerten
-# funktional_prediction = classifier.predict(requirement_description_test)
-# print(classification_report(funktional_test,funktional_prediction))
-# print(confusion_matrix(funktional_test,funktional_prediction))
-
-
-#score1 = classifier.score(requirement_description_train, funktional_train)
-#score2 = classifier.score(requirement_description_test, funktional_test)
-
-# print("Genauigkeit der Trainingsdaten: " + str(score1))
-# print("Genauigkeit der Testdaten: "+ str(score2))
+# save Classifier persistent
+with open("test.pickle", "wb") as file:
+    pickle.dump(CLASSIFIER, file, protocol=pickle.HIGHEST_PROTOCOL)
