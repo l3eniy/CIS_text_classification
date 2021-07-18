@@ -1,43 +1,25 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 import pickle
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
+from sklearn.metrics import confusion_matrix
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier
 
-### PLOT PARAMETERS
-figure(figsize=(15, 6), dpi=120)
-PLOTTITEL = "Wahrscheinlichkeitsverteilung der DTAG Funktionalen Anforderungen <--> CIS-Anforderung:\n"
-YLABEL = "Wahrscheinlichkeit"
-XLABEL = "DTAG Funktionale Anforderung"
-
-### READ DATA from CSV
-df = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')
-cis_requirements = df['CIS-Req'].values
-funktionale_requirements = df['label'].values
-
-# Wie viele CIS_Reqs sind den Funktionalen jeweils zugeordnet? :
-# print("label\tcount")
-# print(df['label'].value_counts())
-
-
-### MEINE TESTDATEN
-list_X = ["Heute ist das Wetter nicht gut", "Heute ist das Wetter gut", "Heute das Wetter ist nicht gut",
-          "Das Wetter ist heute gut", "Kopfschmerzen sind schlimm!", "Heute habe ich Kopfschmerzen wegen dem Wetter"]
-list_Y = ["0", "1", "0", "1", "Kopfschmerzen",
-          "Kopfschmerzen"]  # 0 --> schlechtes Wetter, 1 --> gutes Wetter, 3 --> Kopfschmerzen
+list_X = ["eiche", "erle", "Pudel","Banane", "Birke", "Fichte", "erdbeere", "Schäferhund", "Apfel", "Traube"]
+list_Y = ["baum", "baum", "hund", "frucht", "baum", "baum", "frucht", "hund", "frucht", "frucht"]
 
 # global verfügbare Objekte
 VECTORIZER = CountVectorizer()  # Muss global verfügbar sein
 # CLASSIFIER = SVC()
+CLASSIFIER = DecisionTreeClassifier()
 # CLASSIFIER = LogisticRegression()
-CLASSIFIER = RandomForestClassifier()
-
-
+# CLASSIFIER = RandomForestClassifier()
 # CLASSIFIER = GradientBoostingClassifier()
 
 
@@ -84,52 +66,16 @@ def print_mapping(X, Y, filter):
             print(X[i] + "\t\t-->\t\t" + str(Y[i]))
 
 
-def save_persistent_model(pickle_file_name):
-    with open(pickle_file_name, "wb") as file:
-        pickle.dump(CLASSIFIER, file, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-def use_persistent_model(pickle_file_name):
-    with open(pickle_file_name, 'rb') as handle:
-        classifier_from_pickle = pickle.load(handle)
-    return classifier_from_pickle
-
-
-def get_prediction_probability_for_sample(sample):
-    X_test = VECTORIZER.transform([sample])
-    prediction_probability = CLASSIFIER.predict_proba(X_test)
-    return prediction_probability[0]
-
-
-def get_probability_plot(values, testdata_x):
-    names = ["N/A"]
-    for i in range(1, 35):
-        names.append("f" + str(i))
-
-    plt.bar(names, values)
-    plt.title(PLOTTITEL + testdata_x)
-    plt.ylabel(YLABEL)
-    plt.xlabel(XLABEL)
-    plt.show()
-
-
-### TRAINING DES MODELLS
-# CLASSIFIER = use_persistent_model("test1.pickle")
-X, Y = prepare_trainingsdata(cis_requirements, funktionale_requirements)
+X, Y = prepare_trainingsdata(list_X, list_Y)
 CLASSIFIER.fit(X, Y)  # Hier wird das ausgewählte Modell mit den trainingsdaten trainiert
 
+test_X = "bananenhund"
 
-# print_mapping(cis_requirements, funktionale_requirements, 33)
 
-
-### TESTEN DES MODELLS
-test_X = "syslog must be configured"
-
-prediction_probabilities = get_prediction_probability_for_sample(test_X)
-print(prediction_probabilities)
-get_probability_plot(prediction_probabilities, test_X)
+print(CLASSIFIER.predict_proba(VECTORIZER.transform([test_X])))
 
 predict_funktionale_Anforderung(test_X)
 
-# save Classifier persistent as pickle file
-# save_persistent_model("test1.pickle")
+
+
+
