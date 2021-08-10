@@ -118,12 +118,14 @@ def get_probability_plot(values, testdata_x):
 X, Y = prepare_trainingsdata(cis_requirements, funktionale_requirements)
 CLASSIFIER.fit(X, Y)  # Hier wird das ausgewählte Modell mit den trainingsdaten trainiert
 
+print_mapping(cis_requirements,funktionale_requirements,34)
+
 
 # print_mapping(cis_requirements, funktionale_requirements, 33)
 
 
 ### TESTEN DES MODELLS
-test_X = "Ensure Telnet is not used"
+test_X = "ensure rsyslog is used for remote log" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
 
 prediction_probabilities = get_prediction_probability_for_sample(test_X)
 print(prediction_probabilities)
