@@ -32,7 +32,7 @@ list_Y = ["0", "1", "0", "1", "Kopfschmerzen",
           "Kopfschmerzen"]  # 0 --> schlechtes Wetter, 1 --> gutes Wetter, 3 --> Kopfschmerzen
 
 # global verfügbare Objekte
-VECTORIZER = CountVectorizer()  # Muss global verfügbar sein
+VECTORIZER = CountVectorizer(max_df=0.25, ngram_range=(1,1))  # Muss global verfügbar sein # FEATURE ENGINEERING DURCH PARAMETER
 # CLASSIFIER = SVC()
 # CLASSIFIER = LogisticRegression()
 CLASSIFIER = RandomForestClassifier()
@@ -64,7 +64,7 @@ def predict_funktionale_Anforderung(neuer_y_string):
     """
     X_test = VECTORIZER.transform([neuer_y_string])
     predicted_label = CLASSIFIER.predict(X_test)
-    print(neuer_y_string + "\t\t-->\t\t" + str(predicted_label[0]))
+    print("[+] " + neuer_y_string + "\t\t-->\t\t" + str(predicted_label[0]))
     return predicted_label[0]
 
 
@@ -123,13 +123,14 @@ CLASSIFIER.fit(X, Y)  # Hier wird das ausgewählte Modell mit den trainingsdaten
 
 
 ### TESTEN DES MODELLS
-test_X = "syslog must be configured"
+test_X = "Ensure Telnet is not used"
 
 prediction_probabilities = get_prediction_probability_for_sample(test_X)
 print(prediction_probabilities)
 get_probability_plot(prediction_probabilities, test_X)
 
 predict_funktionale_Anforderung(test_X)
+print("[+] Folgende Stopwords wurden entfernt:  " + str(VECTORIZER.stop_words_))
 
 # save Classifier persistent as pickle file
 # save_persistent_model("test1.pickle")
