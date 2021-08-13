@@ -1,0 +1,80 @@
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingClassifier
+
+
+'''Einlesen der Daten als CSV'''
+df = pd.read_csv(r'BigDataTemplate4.csv')
+
+'''Ausgeben des Datensatzes'''
+print(df.head())
+
+'''Überprüfen, ob die Länge des Datensatzes mit den Excelspalten übereinstimmt'''
+print("Anzahl der Requirements in unserem Datensatz", len(df))
+
+'''Initialisieren der x,y Variablen mit Label und CIS_Req'''
+requirement_description = df['CIS_Req']
+y = df['Label']
+
+
+'''Aufteilen von requirement_description, y in Trainings und Testdaten'''
+'''Random-State muss eine numerische Zahl enthalten, so dass immer die gleichen Trainings- und Testdaten verwendet werden'''
+requirement_description_train, requirement_description_test, y_train, y_test = train_test_split(requirement_description,
+                    y, test_size = 0.25, random_state = 1000)
+'''Initialisieren des Vectorizers, Möglichkeit Preprocessing z.B in ngrams zu übergeben'''
+vectorizer2 = CountVectorizer()
+'''Fit = Learn a vocabulary dictionary of all tokens in the raw documents.'''
+'''Erstellen eines Dicts mit den Trainingsdaten, Testdaten würden das Ergebnis verfälschen'''
+vectorizer2.fit(requirement_description_train)
+'''.vocabulary_ A mapping of terms to feature indices.'''
+vectorizer2.vocabulary_
+
+
+'''Das Array sieht so aus als gäbe es nur Nullen, hier passiert folgendes:
+jede einzelne Liste im Array steht für einen Satz, also ein Requirement; 
+die Liste hat dabei nicht die Länge des Satzes sondern der GESAMTANZAHL AN WÖRTERN IM DATENSATZ!!!
+die Reihenfolge jeder einzelnen Liste entspricht also den Worten von cv.get_feature_names.
+Die Anzahl der Wörter wird dann pro Satz durch eine Zahl markiert, 1 bedeutet, das Wort kommt 1x vor, 2 2x usw.'''
+a = vectorizer2.transform(requirement_description_train).toarray()
+'''Hier bekommt man alle Arrays, die Variable a dient nur zur Veranschauung was passiert'''
+print("Alle entstandenen vectorisierten Arrays", a)
+
+'''Hier bekommt man das CIS_Req Nr.50'''
+print("Beispielarray an der 50. Stelle", a[50])
+
+print(vectorizer2.get_feature_names())
+
+'''Alle Daten werden zu numerischen Werten transformiert'''
+X_train = vectorizer2.transform(requirement_description_train)
+X_test = vectorizer2.transform(requirement_description_test)
+
+'''Initialisieren des Algorithmus und Übergabe der Daten'''
+classifier = GradientBoostingClassifier()
+classifier.fit(X_train, y_train)
+
+'''Auswertung der Vorhersage bzgl. der Richtigkeit'''
+predicted_label = list(classifier.predict(X_test))
+print("Predicted Label:", predicted_label)
+
+richtiges_label = list(y_test)
+print('Richtiges Label:', richtiges_label)
+
+Requirement_Text = list(requirement_description_test)
+
+Auswertung = list(zip(Requirement_Text, predicted_label))
+print("Zuordnung der Requirements und Label:", Auswertung)
+
+
+'''Messen der Accuracy'''
+score1 = classifier.score(X_train, y_train)
+score2 = classifier.score(X_test, y_test)
+
+
+'''Ausgabe der Scores'''
+print("Accuracy: Train", score1)
+print("Accuracy: Test", score2)
+
+
+
+
