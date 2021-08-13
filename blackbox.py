@@ -31,13 +31,11 @@ list_X = ["Heute ist das Wetter nicht gut", "Heute ist das Wetter gut", "Heute d
 list_Y = ["0", "1", "0", "1", "Kopfschmerzen",
           "Kopfschmerzen"]  # 0 --> schlechtes Wetter, 1 --> gutes Wetter, 3 --> Kopfschmerzen
 
-# global verfügbare Objekte
+### global verfügbare Objekte
 VECTORIZER = CountVectorizer(max_df=0.25, ngram_range=(1,1))  # Muss global verfügbar sein # FEATURE ENGINEERING DURCH PARAMETER
 # CLASSIFIER = SVC()
 # CLASSIFIER = LogisticRegression()
 CLASSIFIER = RandomForestClassifier()
-
-
 # CLASSIFIER = GradientBoostingClassifier()
 
 
@@ -125,7 +123,7 @@ print_mapping(cis_requirements,funktionale_requirements,34)
 
 
 ### TESTEN DES MODELLS
-test_X = "ensure rsyslog is used for remote log" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+test_X = "ensure ldap server is not installed" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
 
 prediction_probabilities = get_prediction_probability_for_sample(test_X)
 print(prediction_probabilities)
