@@ -24,4 +24,4 @@ def classify_text():
         return jsonify("FAILED")
 
 if __name__ == '__main__':
-    api.run()
+    api.run(host='0.0.0.0')
