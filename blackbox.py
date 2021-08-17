@@ -102,7 +102,7 @@ class blackbox:
         data = {}
         for i in range(1, 35):
             names.append("f" + str(i))
-        for i in range(1, 35):
+        for i in range(0, 35):
             data[names[i]] = values[i]
         return data 
 
@@ -138,10 +138,11 @@ class blackbox:
 if __name__ == '__main__':
     ### TESTEN DES MODELLS
     bb = blackbox()
-    test_X = "ensure ldap server is not installed" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+    test_X = "ensure log is empty" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
 
     prediction_probabilities = bb.get_prediction_probability_for_sample(test_X)
     print(prediction_probabilities)
+    print(bb.get_probability_map(prediction_probabilities))
     bb.get_probability_plot(prediction_probabilities, test_X)
 
     bb.predict_funktionale_Anforderung(test_X)

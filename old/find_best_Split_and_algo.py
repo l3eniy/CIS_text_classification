@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 
 
-df = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')
+df = pd.read_csv("../BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')
 
 requirement_description = df['CIS-Req'].values
 funktionales_requirement = df['label'].values
