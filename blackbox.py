@@ -1,15 +1,13 @@
 #!/usr/bin/python3
 
-import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
 import pickle
 import matplotlib.pyplot as plt
+import pandas as pd
+from StemmedCountVectorizer import StemmedCountVectorizer
 from matplotlib.pyplot import figure
+from sklearn.ensemble import RandomForestClassifier
+import statistics
+from sklearn.feature_extraction.text import CountVectorizer
 
 ### PLOT PARAMETERS
 figure(figsize=(15, 6), dpi=120)
@@ -32,7 +30,10 @@ class blackbox:
     cis_requirements = None
     funktionale_requirements = None
     ### global verfügbare Objekte
-    VECTORIZER = CountVectorizer(max_df=0.25, ngram_range=(1,1))  # Muss global verfügbar sein # FEATURE ENGINEERING DURCH PARAMETER
+
+
+    VECTORIZER = StemmedCountVectorizer(max_df=0.25, ngram_range=(1,1), analyzer="word", stop_words='english' )  # Muss global verfügbar sein # FEATURE ENGINEERING DURCH PARAMETER
+    #  VECTORIZER = CountVectorizer(max_df=0.25, ngram_range=(1, 1))
     # CLASSIFIER = SVC()
     # CLASSIFIER = LogisticRegression()
     CLASSIFIER = RandomForestClassifier()
@@ -112,6 +113,7 @@ class blackbox:
             names.append("f" + str(i))
 
         plt.bar(names, values)
+        plt.ylim(top=1)
         plt.title(PLOTTITEL + testdata_x)
         plt.ylabel(YLABEL)
         plt.xlabel(XLABEL)
@@ -138,11 +140,17 @@ class blackbox:
 if __name__ == '__main__':
     ### TESTEN DES MODELLS
     bb = blackbox()
-    test_X = "ensure log is empty" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+    test_X = "ensure rsyslog is used for remote logging" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
 
     prediction_probabilities = bb.get_prediction_probability_for_sample(test_X)
     print(prediction_probabilities)
+
+    varianz = statistics.variance(prediction_probabilities)
+    print("variance = " + str(varianz))
+
     print(bb.get_probability_map(prediction_probabilities))
+    print(bb.VECTORIZER.vocabulary_)
+    XLABEL += ("    varianz =" + str(1/ (varianz * len(prediction_probabilities))))
     bb.get_probability_plot(prediction_probabilities, test_X)
 
     bb.predict_funktionale_Anforderung(test_X)
