@@ -2,6 +2,8 @@ import statistics
 import numpy
 import numpy as np
 from blackbox import blackbox
+import threading
+import time
 
 # Die wievielt höchste Wahrscheinlichkeit ist die richtige FA? --> richtiges ergebnis
 # 1 = 100
@@ -11,20 +13,21 @@ from blackbox import blackbox
 # Gibt es viel Rauschen? --> cofidence
 # 1/Varianz subtrahieren
 
-verification_data = [["ensure unsecure ldap is not used", 1],
-                     ["ensure rockets are not built on the moon", 0],
-                     ["initial passwords must be changed after first use", 27],
-                     ["user accounts must be used with least privileges", 28],
+verification_data = [["Ensure IMAP and POP3 server is not installed", 1],
+                     ["Ensure all AppArmor Profiles are in enforce or complain mode", 6],
+                     ["Ensure sudo log file exists", 33],
+                     ["Ensure minimum days between password changes is configured", 31],
+                     ["This is no CIS requirement", 0]
                      ]
 
 
 class BlackboxTester:
-    bb = blackbox()
-    scores = []  # list to collect all scores
-    final_score = None
 
     def __init__(self):
-        self.final_score = self.__get_overall_score(verification_data)
+        self.bb = blackbox()
+        self.scores = []  # list to collect all scores
+        self.final_score = None
+        self.__get_overall_score(verification_data)
 
     def __calculate_score(self, verification_string, correct_functional_req):
         score = 0  # initialize score
@@ -55,14 +58,19 @@ class BlackboxTester:
         return score
 
     def __get_overall_score(self, verification_list):
-        for item in verification_data:
+        for item in verification_list:
             self.scores.append(self.__calculate_score(item[0], item[1]))
         # Gesamtergebnis ist das arithmetische Mittel aller Scores
-        final_Score = np.mean(self.scores)
-        return final_Score
+        self.final_score = np.mean(self.scores)
 
 
 if __name__ == '__main__':
-    bt = BlackboxTester()
-    print("[+] Scores = " + str(bt.scores))
-    print("[+] Final Score = " + str(bt.final_score))
+    bag_of_scores = []
+    objs = [BlackboxTester() for i in range(10)]
+    for obj in objs:
+        bag_of_scores.append(obj.final_score)
+        print("[+] Scores = " + str(obj.scores))
+    print("[+] Overall Score is " + str(np.mean(bag_of_scores)))
+
+    # print("[+] Scores = " + str(obj.scores))
+    # print("[+] Final Score = " + str(obj.final_score))

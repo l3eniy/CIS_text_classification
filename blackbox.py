@@ -3,10 +3,17 @@
 import pickle
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+
 from StemmedCountVectorizer import StemmedCountVectorizer
 from matplotlib.pyplot import figure
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import statistics
+from sklearn.naive_bayes import GaussianNB
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 
 ### PLOT PARAMETERS
@@ -33,11 +40,15 @@ class blackbox:
 
 
     VECTORIZER = StemmedCountVectorizer(max_df=0.25, ngram_range=(1,1), analyzer="word", stop_words='english' )  # Muss global verfügbar sein # FEATURE ENGINEERING DURCH PARAMETER
-    #  VECTORIZER = CountVectorizer(max_df=0.25, ngram_range=(1, 1))
-    # CLASSIFIER = SVC()
-    # CLASSIFIER = LogisticRegression()
-    CLASSIFIER = RandomForestClassifier()
-    # CLASSIFIER = GradientBoostingClassifier()
+    # VECTORIZER = CountVectorizer(max_df=0.25, ngram_range=(1, 1))
+    # CLASSIFIER = SVC(probability=True)                      # 50
+    # CLASSIFIER = LogisticRegression()                     # 45
+    # CLASSIFIER = RandomForestClassifier()                 # 45
+    # CLASSIFIER = DecisionTreeClassifier()                 # 8
+    # CLASSIFIER = GaussianProcessClassifier()              # NOT WORKING
+    CLASSIFIER = MLPClassifier(max_iter=400, random_state=1)                          # 40
+    # CLASSIFIER = GaussianNB()                             # NOT WORKING
+    # CLASSIFIER = GradientBoostingClassifier()             # 17
 
     def prepare_trainingsdata(self,cis_list, funktional_list):
         """
@@ -113,7 +124,7 @@ class blackbox:
             names.append("f" + str(i))
 
         plt.bar(names, values)
-        plt.ylim(top=1)
+        # plt.ylim(top=1)
         plt.title(PLOTTITEL + testdata_x)
         plt.ylabel(YLABEL)
         plt.xlabel(XLABEL)
@@ -140,7 +151,7 @@ class blackbox:
 if __name__ == '__main__':
     ### TESTEN DES MODELLS
     bb = blackbox()
-    test_X = "ensure rsyslog is used for remote logging" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+    test_X = "passwords must be changed on first use" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
 
     prediction_probabilities = bb.get_prediction_probability_for_sample(test_X)
     print(prediction_probabilities)
