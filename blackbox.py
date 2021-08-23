@@ -123,13 +123,16 @@ print_mapping(cis_requirements,funktionale_requirements,34)
 
 
 ### TESTEN DES MODELLS
-test_X = "ensure ldap server is not installed" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+reading_testdata = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')# ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+test_X = df['CIS-Req'].values
+for e in range(len(test_X)):
 
-prediction_probabilities = get_prediction_probability_for_sample(test_X)
-print(prediction_probabilities)
-get_probability_plot(prediction_probabilities, test_X)
+    prediction_probabilities = get_prediction_probability_for_sample(test_X[e])
+    print(prediction_probabilities)
+    get_probability_plot(prediction_probabilities, test_X[e])
 
-predict_funktionale_Anforderung(test_X)
+
+    predict_funktionale_Anforderung(test_X[e])
 print("[+] Folgende Stopwords wurden entfernt:  " + str(VECTORIZER.stop_words_))
 
 # save Classifier persistent as pickle file
