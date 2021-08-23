@@ -123,16 +123,18 @@ print_mapping(cis_requirements,funktionale_requirements,34)
 
 
 ### TESTEN DES MODELLS
-reading_testdata = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')# ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
-test_X = df['CIS-Req'].values
-for e in range(len(test_X)):
+reading_testdata = pd.read_csv("CIS_WindowsReq.txt", names=['CIS-Req'], sep='\t', encoding = "UTF-8", engine='python')# ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+print(reading_testdata)
+test_X = reading_testdata['CIS-Req'].values
+for cis_requirements in range(len(test_X)):
 
-    prediction_probabilities = get_prediction_probability_for_sample(test_X[e])
+    prediction_probabilities = get_prediction_probability_for_sample(test_X[cis_requirements])
     print(prediction_probabilities)
-    get_probability_plot(prediction_probabilities, test_X[e])
+    get_probability_plot(prediction_probabilities, test_X[cis_requirements])
 
 
-    predict_funktionale_Anforderung(test_X[e])
+    predict_funktionale_Anforderung(test_X[cis_requirements])
+
 print("[+] Folgende Stopwords wurden entfernt:  " + str(VECTORIZER.stop_words_))
 
 # save Classifier persistent as pickle file
