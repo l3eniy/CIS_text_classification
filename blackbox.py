@@ -124,7 +124,7 @@ print_mapping(cis_requirements,funktionale_requirements,34)
 
 ### TESTEN DES MODELLS
 reading_testdata = pd.read_csv("CIS_WindowsReq.txt", names=['CIS-Req'], sep='\t', encoding = "UTF-8", engine='python')# ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
-print(reading_testdata)
+#print(reading_testdata)
 test_X = reading_testdata['CIS-Req'].values
 for cis_requirements in range(len(test_X)):
 
