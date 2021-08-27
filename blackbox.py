@@ -8,6 +8,9 @@ from sklearn.ensemble import GradientBoostingClassifier
 import pickle
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
+from openpyxl import Workbook
+import xlsxwriter
+
 
 ### PLOT PARAMETERS
 figure(figsize=(15, 6), dpi=120)
@@ -19,6 +22,15 @@ XLABEL = "DTAG Funktionale Anforderung"
 df = pd.read_csv("BigDataTemplate4.txt", names=['CIS-Req', 'label'], sep='\t')
 cis_requirements = df['CIS-Req'].values
 funktionale_requirements = df['label'].values
+
+### READ TEST-DATA from CSV
+reading_testdata = pd.read_csv("CIS_WindowsReq.txt", names=['CIS-Req'], sep='\t', encoding="UTF-8", engine='python')  # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+test_X = reading_testdata['CIS-Req'].values
+
+### READ FUNCTIONAL REQUIREMENTS FROM CSV
+read_functional = pd.read_csv("Funktionale_Anforderungen_OS_en.txt", names=['FR'],  sep='\t', engine='python')
+functional_text = read_functional['FR'].values
+
 
 # Wie viele CIS_Reqs sind den Funktionalen jeweils zugeordnet? :
 # print("label\tcount")
@@ -32,10 +44,13 @@ list_Y = ["0", "1", "0", "1", "Kopfschmerzen",
           "Kopfschmerzen"]  # 0 --> schlechtes Wetter, 1 --> gutes Wetter, 3 --> Kopfschmerzen
 
 ### global verfügbare Objekte
-VECTORIZER = CountVectorizer(max_df=0.25, ngram_range=(1,1))  # Muss global verfügbar sein # FEATURE ENGINEERING DURCH PARAMETER
+VECTORIZER = CountVectorizer(max_df=0.25,
+                             ngram_range=(1, 1))  # Muss global verfügbar sein # FEATURE ENGINEERING DURCH PARAMETER
 # CLASSIFIER = SVC()
 # CLASSIFIER = LogisticRegression()
 CLASSIFIER = RandomForestClassifier()
+
+
 # CLASSIFIER = GradientBoostingClassifier()
 
 
@@ -62,7 +77,7 @@ def predict_funktionale_Anforderung(neuer_y_string):
     """
     X_test = VECTORIZER.transform([neuer_y_string])
     predicted_label = CLASSIFIER.predict(X_test)
-    print("[+] " + neuer_y_string + "\t\t-->\t\t" + str(predicted_label[0]))
+    # print("[+] " + neuer_y_string + "\t\t-->\t\t" + str(predicted_label[0]))
     return predicted_label[0]
 
 
@@ -111,29 +126,46 @@ def get_probability_plot(values, testdata_x):
     plt.show()
 
 
+### TESTEN DES MODELLS
+def test_excel_windows(test_X):
+    wb = xlsxwriter.Workbook("Excel1.xlsx")
+    ws = wb.add_worksheet()
+    row = 0
+    col = 0
+    #for e in functional_text:
+    #    ws.write(row, col, e)
+    for cis_requirements in range(len(test_X)):
+        prediction_probabilities = list(get_prediction_probability_for_sample(test_X[cis_requirements]))
+        #get_probability_plot(prediction_probabilities, test_X[cis_requirements])
+        predict_funktionale_Anforderung(test_X[cis_requirements])
+        for e in test_X:
+            col = 0
+            ws.write(row, col, test_X[cis_requirements])
+            col += 1
+            for i in prediction_probabilities:
+                if i >= 0.2:
+                    redBgColorCellFormat = wb.add_format()
+                    redBgColorCellFormat.set_bg_color('red')
+                    ws.write(row, col, i, redBgColorCellFormat)
+                    col += 1
+                else:
+                    ws.write(row, col, 'N/A')
+                    col += 1
+        row += 1
+    wb.close()
+
+
+
+
 ### TRAINING DES MODELLS
 # CLASSIFIER = use_persistent_model("test1.pickle")
 X, Y = prepare_trainingsdata(cis_requirements, funktionale_requirements)
 CLASSIFIER.fit(X, Y)  # Hier wird das ausgewählte Modell mit den trainingsdaten trainiert
 
-print_mapping(cis_requirements,funktionale_requirements,34)
+#print_mapping(cis_requirements, funktionale_requirements, 34)
 
-
-# print_mapping(cis_requirements, funktionale_requirements, 33)
-
-
-### TESTEN DES MODELLS
-reading_testdata = pd.read_csv("CIS_WindowsReq.txt", names=['CIS-Req'], sep='\t', encoding = "UTF-8", engine='python')# ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
-#print(reading_testdata)
-test_X = reading_testdata['CIS-Req'].values
-for cis_requirements in range(len(test_X)):
-
-    prediction_probabilities = get_prediction_probability_for_sample(test_X[cis_requirements])
-    print(prediction_probabilities)
-    get_probability_plot(prediction_probabilities, test_X[cis_requirements])
-
-
-    predict_funktionale_Anforderung(test_X[cis_requirements])
+###TESTEN DES MODELLS
+test_excel_windows(test_X)
 
 print("[+] Folgende Stopwords wurden entfernt:  " + str(VECTORIZER.stop_words_))
 
