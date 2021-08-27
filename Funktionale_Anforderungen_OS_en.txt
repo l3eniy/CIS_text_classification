@@ -1,0 +1,33 @@
+Unused services and protocols must be deactivated.
+The reachability of services must be restricted.
+"If services cannot be bind to the minimal required interfaces by configuration, a local (packet) filter must regulate the accessibility of the service."
+Unused software must not be installed or must be uninstalled.
+Unused functions of the operated software and hardware must be deactivated.
+"The privileges for processes, services and applications must be reduced to the minimum required for the tasks they have to perform."
+Kernel based network functions not needed for the operation as a server must be deactivated.
+The automatic launch of applications on removable media must be deactivated.
+The administration of the operating system must be done via a network interface which is independent from the production network.
+Administrative services and access must be bind to only those interfaces that have been set up to administer.
+"Network based access used for operating system administration must have integrity protection, be encrypted and securely authenticated."
+Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
+Data with need of protection must be protected against unauthorized viewing and manipulation during transmission and storage.
+"If the system is not located in a room with at least protection class ""high"" (PC3), the BIOS and, if available, other options for local management must be secured against unauthorized access."
+"If the system is not located in a room with at least protection class ""high"" (PC3), used data storages must be fully encrypted."
+The system must be robust against overload situations and must act in a predictable way.
+Growing (dynamic) content must not influence system functions.
+The IPv4 and IPv6 addresses of all interfaces of a server must be configured statically.
+The TCP/IP stack must be implemented and configured in accordance with current knowledge to prevent attacks against the system and its network connections.
+Systems must not process IP packets whose source address is not reachable via the incoming interface.
+The processing of ICMPv4 and ICMPv6 packets which are not required for operation must be disabled.
+An authentication method must be used that allow unambiguous identification of the user.
+Accounts must be protected against unauthorized use by at least one authentication attribute.
+User accounts with extensive rights must be protected with two authentication attributes.
+"There must be no privilege escalation method which allow gaining administrator/root privileges from an user account without a sufficiently strong, renewed authentication."
+Predefined authentication attributes must be deleted or disabled.
+The privileges of accounts must be reduced to the minimum required for the tasks they have to perform.
+The system must be connected to a central system for user administration.
+The number of local accounts needed for operation must be minimized.
+"If passwords are used for authentication, precautions must be taken to minimize the risks involved by using passwords."
+The system clock must be synchronized to a accurate reference time (Time Standard).
+Security relevant events must be logged with a precise timestamp and a unique system reference.
+Security relevant logging data must be send to an remote system directly after their creation.
