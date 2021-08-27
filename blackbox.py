@@ -28,7 +28,7 @@ reading_testdata = pd.read_csv("CIS_WindowsReq.txt", names=['CIS-Req'], sep='\t'
 test_X = reading_testdata['CIS-Req'].values
 
 ### READ FUNCTIONAL REQUIREMENTS FROM CSV
-read_functional = pd.read_csv("Funktionale_Anforderungen_OS_en.txt", names=['FR'],  sep='\t', engine='python')
+read_functional = pd.read_csv("Funktionale_Anforderungen_OS_en.csv", names=['FR'],  sep='\t', engine='python')
 functional_text = read_functional['FR'].values
 
 
@@ -127,30 +127,39 @@ def get_probability_plot(values, testdata_x):
 
 
 ### TESTEN DES MODELLS
-def test_excel_windows(test_X):
+def test_excel_windows(test_X, functional_text):
     wb = xlsxwriter.Workbook("Excel1.xlsx")
     ws = wb.add_worksheet()
+    MagentaBgColorCellFormat = wb.add_format()
+    MagentaBgColorCellFormat.set_bg_color('ea0a8e')
+    LightBlueBgColorCellFormat = wb.add_format()
+    LightBlueBgColorCellFormat.set_bg_color('add8e6')
     row = 0
-    col = 0
-    #for e in functional_text:
-    #    ws.write(row, col, e)
+    col = 1
+    for e in functional_text:
+        ws.write(row, col, e, MagentaBgColorCellFormat)
+        col += 1
+    row += 1
+
     for cis_requirements in range(len(test_X)):
-        prediction_probabilities = list(get_prediction_probability_for_sample(test_X[cis_requirements]))
+        prediction_probabilities = get_prediction_probability_for_sample(test_X[cis_requirements])
         #get_probability_plot(prediction_probabilities, test_X[cis_requirements])
         predict_funktionale_Anforderung(test_X[cis_requirements])
         for e in test_X:
             col = 0
-            ws.write(row, col, test_X[cis_requirements])
+            ws.write(row, col, test_X[cis_requirements], LightBlueBgColorCellFormat)
             col += 1
-            for i in prediction_probabilities:
-                if i >= 0.2:
-                    redBgColorCellFormat = wb.add_format()
-                    redBgColorCellFormat.set_bg_color('red')
-                    ws.write(row, col, i, redBgColorCellFormat)
-                    col += 1
-                else:
-                    ws.write(row, col, 'N/A')
-                    col += 1
+        col = 1
+
+        for i in prediction_probabilities:
+            if i >= 0.2:
+                redBgColorCellFormat = wb.add_format()
+                redBgColorCellFormat.set_bg_color('red')
+                ws.write(row, col, i, redBgColorCellFormat)
+                col += 1
+            else:
+                ws.write(row, col, 'N/A')
+                col += 1
         row += 1
     wb.close()
 
@@ -165,7 +174,7 @@ CLASSIFIER.fit(X, Y)  # Hier wird das ausgewählte Modell mit den trainingsdaten
 #print_mapping(cis_requirements, funktionale_requirements, 34)
 
 ###TESTEN DES MODELLS
-test_excel_windows(test_X)
+test_excel_windows(test_X, functional_text)
 
 print("[+] Folgende Stopwords wurden entfernt:  " + str(VECTORIZER.stop_words_))
 
