@@ -27,6 +27,8 @@ funktionale_requirements = df['label'].values
 reading_testdata = pd.read_csv("CIS_WindowsReq.txt", names=['CIS-Req'], sep='\t', encoding="UTF-8", engine='python')  # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
 test_X = reading_testdata['CIS-Req'].values
 
+### READ TEST-DATA from XML
+
 ### READ FUNCTIONAL REQUIREMENTS FROM CSV
 read_functional = pd.read_csv("Funktionale_Anforderungen_OS_en.csv", names=['FR'],  sep='\t', engine='python')
 functional_text = read_functional['FR'].values
@@ -145,6 +147,11 @@ def test_excel_windows(test_X, functional_text):
         prediction_probabilities = get_prediction_probability_for_sample(test_X[cis_requirements])
         #get_probability_plot(prediction_probabilities, test_X[cis_requirements])
         predict_funktionale_Anforderung(test_X[cis_requirements])
+
+        ###Definition of the three Highest Possibility Values
+        Wkt_zu_Liste = list(prediction_probabilities)
+        Wkt_zu_Liste.sort()
+        Q = Wkt_zu_Liste[-3:]
         for e in test_X:
             col = 0
             ws.write(row, col, test_X[cis_requirements], LightBlueBgColorCellFormat)
@@ -152,7 +159,17 @@ def test_excel_windows(test_X, functional_text):
         col = 1
 
         for i in prediction_probabilities:
-            if i >= 0.2:
+            if i == Q[0]:
+                redBgColorCellFormat = wb.add_format()
+                redBgColorCellFormat.set_bg_color('red')
+                ws.write(row, col, i, redBgColorCellFormat)
+                col += 1
+            elif i == Q[1]:
+                redBgColorCellFormat = wb.add_format()
+                redBgColorCellFormat.set_bg_color('red')
+                ws.write(row, col, i, redBgColorCellFormat)
+                col += 1
+            elif i == Q[2]:
                 redBgColorCellFormat = wb.add_format()
                 redBgColorCellFormat.set_bg_color('red')
                 ws.write(row, col, i, redBgColorCellFormat)
