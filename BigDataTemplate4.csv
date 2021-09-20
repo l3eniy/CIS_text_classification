@@ -270,3 +270,37 @@ Cntrl,C-Title,Decription,B-Title,Level,Label1
 16,Account Monitoring and  ,Account Monitoring and Control;,Ensure no duplicate GIDs exist,L1,28
 16,Account Monitoring and  ,Account Monitoring and Control;,Ensure no duplicate user names exist,L1,0
 16,Account Monitoring and  ,Account Monitoring and Control;,Ensure no duplicate group names exist,L1,23
+,,,"(L1) Ensure 'Change the system time' is set to 'Administrators, LOCAL SERVICE'",,32
+,,,(L1) Ensure 'Create a pagefile' is set to 'Administrators',,2
+,,,(L1) Configure 'Accounts: Rename administrator account',,27
+,,,(L1) Configure 'Accounts: Rename guest account',,27
+,,,"(L1) Ensure 'Access this computer from the network' is set to 'Administrators, Authenticated Users, ENTERPRISE DOMAIN CONTROLLERS' (DC only)",,10
+,,,(L1) Ensure 'Allow log on locally' is set to 'Administrators',,28
+,,,"(L1) Ensure 'Allow log on through Remote Desktop Services' is set to 'Administrators, Remote Desktop Users' (MS only)",,28
+,,,(L1) Ensure 'Create a pagefile' is set to 'Administrators',,14
+,,,(L1) Ensure 'Enable computer and user accounts to be trusted for delegation' is set to 'No One' (MS only),,23
+,,,"(L1) Ensure 'Generate security audits' is set to 'LOCAL SERVICE, NETWORK SERVICE'",,33
+,,,"(L1) Ensure 'Impersonate a client after authentication' is set to 'Administrators, LOCAL SERVICE, NETWORK SERVICE, SERVICE' and (when the Web Server (IIS) Role with Web Services Role Service is installed) 'IIS_IUSRS' (MS only)",,28
+,,,(L1) Ensure 'Restore files and directories' is set to 'Administrators',,14
+,,,(L1) Configure 'Network access: Remotely accessible registry paths',,14
+,,,(L1) Ensure 'Network security: LAN Manager authentication level' is set to 'Send NTLMv2 response only. Refuse LM&NTLM',,11
+,,,"(L1) Ensure 'Network security: Minimum session security for NTLM SSP based (including secure RPC) clients' is set to 'Require NTLMv2 session security, Require 128-bit encryption'",,11
+,,,(L1) Ensure 'Windows Firewall: Public: Logging: Log dropped packets' is set to 'Yes',,33
+,,,(L1) Ensure 'Windows Firewall: Public: Logging: Log successful connections' is set to 'Yes',,33
+,,,(L1) Ensure 'Audit Detailed File Share' is set to include 'Failure',,33
+,,,(L1) Ensure 'Audit File Share' is set to 'Success and Failure',,33
+,,,(L1) Ensure 'Audit Security State Change' is set to include 'Success',,33
+,,,(L1) Ensure 'Password Settings: Password Complexity' is set to 'Enabled: Large letters + small letters + numbers + special characters' (MS only),,24
+,,,(L1) Ensure 'Configure SMB v1 server' is set to 'Disabled',,1
+,,,(L1) Ensure 'MSS: (WarningLevel) Percentage threshold for the security event log at which the system will generate a warning' is set to 'Enabled: 90% or less',,18
+,,,(L1) Ensure 'Turn off multicast name resolution' is set to 'Enabled',,1
+,,,(L1) Ensure 'Require domain users to elevate when setting a network's location' is set to 'Enabled',,28
+,,,(NG) Ensure 'Turn On Virtualization Based Security' is set to 'Enabled',,14
+,,,(NG) Ensure 'Turn On Virtualization Based Security: Credential Guard Configuration' is set to 'Enabled with UEFI lock' (MS Only),,14
+,,,(L2) Ensure 'Turn off Registration if URL connection is referring to Microsoft.com' is set to 'Enabled',,1
+,,,"(L2) Ensure 'Turn off the ""Publish to Web"" task for files and folders' is set to 'Enabled'",,1
+,,,(L2) Ensure 'Disallow copying of user input methods to the system account for sign-in' is set to 'Enabled',,28
+,,,(L1) Ensure 'Do not display network selection UI' is set to 'Enabled',,28
+,,,(L1) Ensure 'Require pin for pairing' is set to 'Enabled: First Time' OR 'Enabled: Always',,24
+,,,(L1) Ensure 'Toggle user control over Insider builds' is set to 'Disabled',,12
+,,,"(L1) Ensure 'Security: Specify the maximum log file size (KB)' is set to 'Enabled: 196,608 or greater'",,33
