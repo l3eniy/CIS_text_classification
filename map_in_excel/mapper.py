@@ -1,5 +1,3 @@
-import os
-from shutil import copy2
 import openpyxl
 
 SPALTE_CIS = 12
