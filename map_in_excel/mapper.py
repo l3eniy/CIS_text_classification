@@ -1,5 +1,10 @@
 import openpyxl
 
+# Folgende Files werden benötigt:
+# --> CIS_CAT_RESULTS.xlsx
+# --> CIS_FUN_MAPPED.xlsx
+
+
 SPALTE_CIS = 12
 ZEILE_ERSTES_CIS = 15
 ERSTES_FUN_REQUIREMENT = 19
