@@ -69,7 +69,7 @@ if __name__ == '__main__':
     objs = [BlackboxTester() for i in range(10)]
     for obj in objs:
         bag_of_scores.append(obj.final_score)
-        print("[+] Scores = " + str(obj.scores))
+        # print("[+] Scores = " + str(obj.scores))
     print("[+] Overall Score is " + str(np.mean(bag_of_scores)))
 
     # print("[+] Scores = " + str(obj.scores))

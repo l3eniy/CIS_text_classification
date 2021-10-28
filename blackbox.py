@@ -151,7 +151,7 @@ class blackbox:
 if __name__ == '__main__':
     ### TESTEN DES MODELLS
     bb = blackbox()
-    test_X = "passwords must be changed on first use" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
+    test_X = "Christoph did not ensure to find a topic" # ensure rsyslog is used for remote log  vs.  ensure rsyslog is used for remote logging
 
     prediction_probabilities = bb.get_prediction_probability_for_sample(test_X)
     print(prediction_probabilities)
